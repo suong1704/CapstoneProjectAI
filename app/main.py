@@ -6,7 +6,7 @@ from fastapi import FastAPI, File, UploadFile, Form
 from pydantic import BaseModel
 from audio import AudioUtil
 from typing import Annotated
-# from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="AI Services",
         description="AI services are applications or software that use artificial intelligence to perform tasks, such as image recognition or natural language processing.",
@@ -15,11 +15,14 @@ app = FastAPI(title="AI Services",
         )
 origins = ["*"]
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 client = OpenAI(
   api_key="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",
