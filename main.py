@@ -5,6 +5,7 @@ from openai import OpenAI
 from fastapi import FastAPI, File, UploadFile, Form
 from pydantic import BaseModel
 from typing import Annotated
+import time
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="AI Services",
@@ -37,7 +38,12 @@ async def transcribe(file: UploadFile = File(...)):
         os.makedirs(directory)
 
     # Combine the directory, filename to create the full path
-    full_path = os.path.join(directory, file.filename)
+    timestamp = int(time.time()) 
+    audio_name = f"speech_{timestamp}"
+    # Combine the directory, filename to create the full path
+    full_path = os.path.join(directory, audio_name + file.filename)
+
+    # full_path = os.path.join(directory, file.filename)
 
     # Save audio file to disk temporarily
     try:
