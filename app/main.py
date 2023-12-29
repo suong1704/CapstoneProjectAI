@@ -25,7 +25,7 @@ app.add_middleware(
 
 
 client = OpenAI(
-  api_key="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",
+  api_key="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",
 )
 
 @app.post("/transcribe", tags=["Convert audio to text"], description="Transcribes audio into the input language.")
