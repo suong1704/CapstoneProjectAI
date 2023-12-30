@@ -7,12 +7,15 @@ from pydantic import BaseModel
 from typing import Annotated
 import time
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 
-app = FastAPI(title="AI Services",
-        description="AI services are applications or software that use artificial intelligence to perform tasks, such as image recognition or natural language processing.",
-        version="2.0",
-        openapi_url="/api/v2/openapi.json"
-        )
+app = FastAPI(
+    title="AI Services",
+    description="AI services are applications or software that use artificial intelligence to perform tasks, such as image recognition or natural language processing.",
+    version="2.0",
+    openapi_url="/api/v2/openapi.json",
+)
+
 origins = ["*"]
 
 app.add_middleware(
@@ -23,9 +26,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = OpenAI(
-  api_key="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",
-)
+
+load_dotenv()
+KEY = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=KEY)
 
 @app.post("/transcribe", tags=["Convert audio to text"], description="Transcribes audio into the input language.")
 async def transcribe(file: UploadFile = File(...)):
@@ -37,13 +41,10 @@ async def transcribe(file: UploadFile = File(...)):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    # Combine the directory, filename to create the full path
     timestamp = int(time.time()) 
     audio_name = f"speech_{timestamp}"
     # Combine the directory, filename to create the full path
     full_path = os.path.join(directory, audio_name + file.filename)
-
-    # full_path = os.path.join(directory, file.filename)
 
     # Save audio file to disk temporarily
     try:
